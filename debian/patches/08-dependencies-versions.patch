@@ -1,0 +1,23 @@
+Description: Sets the version of the inter package dependencies to help maven-debian-helper
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: not-needed
+--- a/jaxws-ri/tools/wscompile/pom.xml
++++ b/jaxws-ri/tools/wscompile/pom.xml
+@@ -80,6 +80,7 @@
+         <dependency>
+             <groupId>${project.groupId}</groupId>
+             <artifactId>jaxws-rt</artifactId>
++            <version>${project.version}</version>
+         </dependency>
+ 
+         <dependency>
+--- a/jaxws-ri/bundles/jaxws-tools/pom.xml
++++ b/jaxws-ri/bundles/jaxws-tools/pom.xml
+@@ -62,6 +62,7 @@
+         <dependency>
+             <groupId>${project.groupId}</groupId>
+             <artifactId>jaxws-rt</artifactId>
++            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+             <groupId>com.sun.xml.bind</groupId>

@@ -1,0 +1,95 @@
+Description: Embeds ASM using the maven-shade-plugin instead of importing the sources with the maven-dependency-plugin
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: not-needed
+--- a/jaxws-ri/rt/src/main/java/com/sun/xml/ws/model/WrapperBeanGenerator.java
++++ b/jaxws-ri/rt/src/main/java/com/sun/xml/ws/model/WrapperBeanGenerator.java
+@@ -44,9 +44,9 @@
+ import com.sun.xml.bind.v2.model.annotation.AnnotationReader;
+ import com.sun.xml.bind.v2.model.annotation.RuntimeInlineAnnotationReader;
+ import com.sun.xml.bind.v2.model.nav.Navigator;
+-import com.sun.xml.ws.org.objectweb.asm.*;
+-import static com.sun.xml.ws.org.objectweb.asm.Opcodes.*;
+-import com.sun.xml.ws.org.objectweb.asm.Type;
++import org.objectweb.asm.*;
++import static org.objectweb.asm.Opcodes.*;
++import org.objectweb.asm.Type;
+ 
+ import javax.xml.bind.annotation.XmlAttachmentRef;
+ import javax.xml.bind.annotation.XmlElement;
+--- a/jaxws-ri/rt/pom.xml
++++ b/jaxws-ri/rt/pom.xml
+@@ -104,6 +104,11 @@
+             <artifactId>resolver</artifactId>
+         </dependency>
+         <dependency>
++            <groupId>org.ow2.asm</groupId>
++            <artifactId>asm-all</artifactId>
++            <version>debian</version>
++        </dependency>
++        <dependency>
+             <groupId>junit</groupId>
+             <artifactId>junit</artifactId>
+             <scope>test</scope>
+@@ -140,31 +145,6 @@
+         </resources>
+         <plugins>
+             <plugin>
+-                <groupId>org.apache.maven.plugins</groupId>
+-                <artifactId>maven-dependency-plugin</artifactId>
+-                <executions>
+-                    <execution>
+-                        <id>unpack-asm</id>
+-                        <phase>generate-sources</phase>
+-                        <goals>
+-                            <goal>unpack</goal>
+-                        </goals>
+-                        <configuration>
+-                            <artifactItems>
+-                                <artifactItem>
+-                                    <groupId>asm</groupId>
+-                                    <artifactId>asm</artifactId>
+-                                    <type>jar</type>
+-                                    <classifier>sources</classifier>
+-                                    <version>${asm.version}</version>
+-                                </artifactItem>
+-                            </artifactItems>
+-                            <includes>org/objectweb/asm/*.java</includes>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+-            <plugin>
+                 <groupId>com.sun.wts.tools.ant</groupId>
+                 <artifactId>package-rename-task</artifactId>
+                 <executions>
+@@ -210,6 +190,30 @@
+                         </configuration>
+                     </execution>
+                 </executions>
++            </plugin>
++            <plugin>
++                <artifactId>maven-shade-plugin</artifactId>
++                <executions>
++                    <execution>
++                        <phase>package</phase>
++                        <goals>
++                            <goal>shade</goal>
++                        </goals>
++                        <configuration>
++                            <artifactSet>
++                                <includes>
++                                    <include>asm:asm</include>
++                                </includes>
++                            </artifactSet>
++                            <relocations>
++                                <relocation>
++                                    <pattern>org.objectweb.asm</pattern>
++                                    <shadedPattern>com.sun.xml.ws.org.objectweb.asm</shadedPattern>
++                                </relocation>
++                            </relocations>
++                        </configuration>
++                    </execution>
++                </executions>
+             </plugin>
+             <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>

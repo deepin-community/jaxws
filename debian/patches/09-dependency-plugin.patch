@@ -1,0 +1,29 @@
+Description: Adjusts the package dependencies since maven-debian-helper doesn't substitute them.
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: not-needed
+--- a/jaxws-ri/tools/wscompile/pom.xml
++++ b/jaxws-ri/tools/wscompile/pom.xml
+@@ -176,8 +176,8 @@
+                                     <type>jar</type>
+                                 </artifactItem>
+                                 <artifactItem>
+-                                    <groupId>javax.annotation</groupId>
+-                                    <artifactId>javax.annotation-api</artifactId>
++                                    <groupId>org.apache.geronimo.specs</groupId>
++                                    <artifactId>geronimo-annotation_1.3_spec</artifactId>
+                                     <type>jar</type>
+                                 </artifactItem>
+                                 <artifactItem>
+--- a/jaxws-ri/tools/wscompile-jdk9/pom.xml
++++ b/jaxws-ri/tools/wscompile-jdk9/pom.xml
+@@ -162,8 +162,8 @@
+                                     <type>jar</type>
+                                 </artifactItem>
+                                 <artifactItem>
+-                                    <groupId>javax.annotation</groupId>
+-                                    <artifactId>javax.annotation-api</artifactId>
++                                    <groupId>org.apache.geronimo.specs</groupId>
++                                    <artifactId>geronimo-annotation_1.3_spec</artifactId>
+                                     <type>jar</type>
+                                 </artifactItem>
+                                 <artifactItem>

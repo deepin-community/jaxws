@@ -1,0 +1,34 @@
+Description: Fixes the compatibility with the version of gmbal in Debian
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: no
+--- a/jaxws-ri/rt/src/main/java/com/sun/xml/ws/server/MonitorBase.java
++++ b/jaxws-ri/rt/src/main/java/com/sun/xml/ws/server/MonitorBase.java
+@@ -422,6 +422,9 @@
+     @Override public void close() throws IOException    { mom.close(); }
+     @Override public void setJMXRegistrationDebug(boolean x) { mom.setJMXRegistrationDebug(x); }
+     @Override public boolean isManagedObject(Object x)  { return mom.isManagedObject(x); }
++    @Override public org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager getObjectRegistrationManager() { return mom.getObjectRegistrationManager(); }
++    @Override public void addInheritedAnnotations(Class<?> cls) { mom.addInheritedAnnotations(cls); }
++
+ }
+ 
+ // End of file.
+--- a/jaxws-ri/rt/src/main/java/com/sun/xml/ws/server/WSEndpointMOMProxy.java
++++ b/jaxws-ri/rt/src/main/java/com/sun/xml/ws/server/WSEndpointMOMProxy.java
+@@ -265,6 +265,16 @@
+     }
+ 
+     @Override
++    public org.glassfish.pfl.tf.timer.spi.ObjectRegistrationManager getObjectRegistrationManager() {
++        return getManagedObjectManager().getObjectRegistrationManager();
++    }
++
++    @Override
++    public void addInheritedAnnotations(Class<?> cls) {
++        getManagedObjectManager().addInheritedAnnotations(cls);
++    }
++
++    @Override
+     public void close() throws IOException {
+         getManagedObjectManager().close();
+     }

@@ -1,0 +1,83 @@
+Description: Use the version of xml-resolver in Debian instead of the one repackaged by Sun
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: no
+--- a/jaxws-ri/rt/src/main/java/com/sun/xml/ws/util/xml/XmlCatalogUtil.java
++++ b/jaxws-ri/rt/src/main/java/com/sun/xml/ws/util/xml/XmlCatalogUtil.java
+@@ -41,9 +41,9 @@
+ package com.sun.xml.ws.util.xml;
+ 
+ import com.sun.istack.Nullable;
+-import com.sun.org.apache.xml.internal.resolver.Catalog;
+-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
+-import com.sun.org.apache.xml.internal.resolver.tools.CatalogResolver;
++import org.apache.xml.resolver.Catalog;
++import org.apache.xml.resolver.CatalogManager;
++import org.apache.xml.resolver.tools.CatalogResolver;
+ import com.sun.xml.ws.server.ServerRtException;
+ import java.io.IOException;
+ import java.net.URL;
+--- a/jaxws-ri/tests/unit-rearch/src/whitebox/mex/client/MetadataTester.java
++++ b/jaxws-ri/tests/unit-rearch/src/whitebox/mex/client/MetadataTester.java
+@@ -48,8 +48,8 @@
+ import com.sun.xml.ws.api.model.wsdl.WSDLService;
+ import com.sun.xml.ws.api.model.wsdl.WSDLPort;
+ import com.sun.xml.ws.util.JAXWSUtils;
+-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
+-import com.sun.org.apache.xml.internal.resolver.tools.CatalogResolver;
++import org.apache.xml.resolver.CatalogManager;
++import org.apache.xml.resolver.tools.CatalogResolver;
+ import org.xml.sax.EntityResolver;
+ import org.xml.sax.SAXException;
+ 
+--- a/jaxws-ri/tests/unit/testcases/rt_wsdl_parser/client/WSDLParserTest.java
++++ b/jaxws-ri/tests/unit/testcases/rt_wsdl_parser/client/WSDLParserTest.java
+@@ -40,8 +40,8 @@
+ 
+ package rt_wsdl_parser.client;
+ 
+-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
+-import com.sun.org.apache.xml.internal.resolver.tools.CatalogResolver;
++import org.apache.xml.resolver.CatalogManager;
++import org.apache.xml.resolver.tools.CatalogResolver;
+ import com.sun.xml.ws.api.model.wsdl.WSDLBoundFault;
+ import com.sun.xml.ws.api.model.wsdl.WSDLBoundOperation;
+ import com.sun.xml.ws.api.model.wsdl.WSDLBoundPortType;
+--- a/jaxws-ri/tests/unit/testcases/whitebox/wsdlparser/client/EPRWithNSDeclarationsTest.java
++++ b/jaxws-ri/tests/unit/testcases/whitebox/wsdlparser/client/EPRWithNSDeclarationsTest.java
+@@ -43,8 +43,8 @@
+ import com.sun.xml.ws.test.VersionRequirement;
+ import com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser;
+ import com.sun.xml.ws.api.model.wsdl.*;
+-import com.sun.org.apache.xml.internal.resolver.tools.CatalogResolver;
+-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
++import org.apache.xml.resolver.tools.CatalogResolver;
++import org.apache.xml.resolver.CatalogManager;
+ import junit.framework.TestCase;
+ import org.xml.sax.EntityResolver;
+ import com.sun.xml.ws.api.addressing.WSEndpointReference;
+--- a/jaxws-ri/tests/unit/testcases/whitebox/wsdlparser/client/EPRWriteNReadTest.java
++++ b/jaxws-ri/tests/unit/testcases/whitebox/wsdlparser/client/EPRWriteNReadTest.java
+@@ -44,8 +44,8 @@
+ import com.sun.xml.ws.util.ByteArrayBuffer;
+ import com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser;
+ import com.sun.xml.ws.api.model.wsdl.*;
+-import com.sun.org.apache.xml.internal.resolver.tools.CatalogResolver;
+-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
++import org.apache.xml.resolver.tools.CatalogResolver;
++import org.apache.xml.resolver.CatalogManager;
+ import junit.framework.TestCase;
+ import org.xml.sax.EntityResolver;
+ import com.sun.xml.ws.api.addressing.WSEndpointReference;
+--- a/jaxws-ri/tests/unit/testcases/whitebox/wsdlparser/client/EPRinWsdlPortTest.java
++++ b/jaxws-ri/tests/unit/testcases/whitebox/wsdlparser/client/EPRinWsdlPortTest.java
+@@ -42,8 +42,8 @@
+ 
+ import com.sun.xml.ws.wsdl.parser.RuntimeWSDLParser;
+ import com.sun.xml.ws.api.model.wsdl.*;
+-import com.sun.org.apache.xml.internal.resolver.tools.CatalogResolver;
+-import com.sun.org.apache.xml.internal.resolver.CatalogManager;
++import org.apache.xml.resolver.tools.CatalogResolver;
++import org.apache.xml.resolver.CatalogManager;
+ import junit.framework.TestCase;
+ import org.xml.sax.EntityResolver;
+ import com.sun.xml.ws.api.addressing.WSEndpointReference;

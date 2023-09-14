@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<descriptor since="2.0">
+  <description>Micro benchmark for rpc/lit</description>
+  <service>
+    <wsdl href="rpclit.wsdl" />
+  </service>
+  <pre-client>
+    static ComplexType createComplexType() {
+      ComplexType ct = new ComplexType();
+      ct.setVarString("hello world");
+      ct.setVarInt(53);
+      ct.setVarFloat(913.4f);
+      return ct;
+    }
+    static NestedComplexType createNestedComplexType() {
+      NestedComplexType nct = new NestedComplexType();
+      nct.setVarString("hello world");
+      nct.setVarInt(53);
+      nct.setVarFloat(913.4f);
+      nct.setVarComplexType(createComplexType());
+      return nct;
+    }
+  </pre-client>
+  <client name="echoVoid">
+    echoPort.echoVoid();
+  </client>
+  <client name="echoString">
+    echoPort.echoString("hello");
+  </client>
+  <client name="echoBoolean">
+    echoPort.echoBoolean(true);
+    echoPort.echoBoolean(false);
+  </client>
+  <client name="echoBase64"><![CDATA[
+    StringBuffer buf = new StringBuffer();
+    for(int i=0;i<10;i++) buf.append("0123456789");
+    echoPort.echoBase64(buf.toString().getBytes());
+  ]]></client>
+  <client name="echoDate">
+    javax.xml.datatype.DatatypeFactory dtf = javax.xml.datatype.DatatypeFactory.newInstance();
+    Calendar cal = Calendar.getInstance();
+    javax.xml.datatype.XMLGregorianCalendar gregorianDate = dtf.newXMLGregorianCalendarDate(2005, 1, 12, javax.xml.datatype.DatatypeConstants.FIELD_UNDEFINED);
+
+    echoPort.echoDate(gregorianDate);
+  </client>
+  <client name="echoFloat">
+    echoPort.echoFloat(1.234f);
+  </client>
+  <client name="echoInteger">
+    echoPort.echoInteger(123);
+  </client>
+  <client name="echoDecimal">
+    echoPort.echoDecimal(new java.math.BigDecimal("123"));
+  </client>
+  <client name="echoEnum">
+    echoPort.echoEnum(benchmark.rpclit.client.Enum.BIT_FIVE);
+  </client>
+  <client name="echoStringArray"><![CDATA[
+    StringArray lst = new StringArray();
+    for( int i=0; i<10; i++ )
+      lst.getValue().add("hello world");
+    echoPort.echoStringArray(lst);
+  ]]></client>
+  <client name="echoIntArray"><![CDATA[
+    IntegerArray lst = new IntegerArray();
+    for( int i=0; i<10; i++ )
+      lst.getValue().add(i);
+    echoPort.echoIntegerArray(lst);
+  ]]></client>
+  <client name="echoFloatArray"><![CDATA[
+    FloatArray lst = new FloatArray();
+    for( int i=0; i<10; i++ )
+      lst.getValue().add((float)i);
+    echoPort.echoFloatArray(lst);
+  ]]></client>
+  <client name="echoComplexType">
+    echoPort.echoComplexType(createComplexType());
+  </client>
+  <client name="echoNestedComplexType">
+    echoPort.echoNestedComplexType(createNestedComplexType());
+  </client>
+  <client name="echoComplexTypeArray"><![CDATA[
+    ComplexTypeArray lst = new ComplexTypeArray();
+    for(int i=0;i<100;i++)
+      lst.getValue().add(createComplexType());
+    echoPort.echoComplexTypeArray(lst);
+  ]]></client>
+</descriptor>

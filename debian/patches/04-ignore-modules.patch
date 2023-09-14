@@ -1,0 +1,13 @@
+Description: Ignores some Maven modules manually due to #839738
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: not-needed
+--- a/jaxws-ri/bundles/jaxws-rt/pom.xml
++++ b/jaxws-ri/bundles/jaxws-rt/pom.xml
+@@ -221,7 +221,6 @@
+     <modules>
+         <module>../../rt</module>
+         <module>../../rt-fi</module>
+-        <module>../../rt-ha</module>
+         <module>../../httpspi-servlet</module>
+         <module>../../servlet</module>
+     </modules>

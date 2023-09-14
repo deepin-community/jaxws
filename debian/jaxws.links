@@ -1,0 +1,8 @@
+/usr/share/java/jaxb-api.jar                    /usr/share/jaxws/lib/jaxb-api.jar
+/usr/share/java/jaxb-core.jar                   /usr/share/jaxws/lib/jaxb-core.jar
+/usr/share/java/jaxb-impl.jar                   /usr/share/jaxws/lib/jaxb-impl.jar
+/usr/share/java/jaxb-jxc.jar                    /usr/share/jaxws/lib/jaxb-jxc.jar
+/usr/share/java/jaxb-xjc.jar                    /usr/share/jaxws/lib/jaxb-xjc.jar
+/usr/share/java/jaxws-api.jar                   /usr/share/jaxws/lib/jaxws-api.jar
+/usr/share/java/jaxws-rt.jar                    /usr/share/jaxws/lib/jaxws-rt.jar
+/usr/share/java/jaxws-tools.jar                 /usr/share/jaxws/lib/jaxws-tools.jar

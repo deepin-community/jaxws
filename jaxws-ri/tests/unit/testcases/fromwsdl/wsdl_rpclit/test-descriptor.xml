@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<descriptor since="2.0">
+    <description>WSDL Rpclit tests</description>
+    <service basedir="./server">
+        <wsdl href="service.wsdl"/>
+    </service>
+    <client name="fromwsdl.wsdl_rpclit.getCatalog">
+        <description>
+            Test GetCatalog()
+        </description><![CDATA[
+        CatalogItem [] cil = new CatalogItem [] {new CatalogItem(), new CatalogItem()};
+        cil[0].setName("JAXWS RI 2.1.1");
+        cil[0].setBrand("java.net");
+        cil[0].setCategory("Web Services");
+        cil[0].setProductNumber(1234);
+        cil[0].setDescription("Coolest Webservice Product");
+        cil[0].setPrice(new java.math.BigDecimal("100"));
+
+        cil[1].setName("JAXWS RI 2.0");
+        cil[1].setBrand("java.net");
+        cil[1].setCategory("Web Services");
+        cil[1].setProductNumber(5678);
+        cil[1].setDescription("Coolest Webservice Product");
+        cil[1].setPrice(new java.math.BigDecimal("200"));
+
+        CatalogType ret = retailerPort.getCatalog();
+        for(int i = 0; i < ret.getItem().size(); i++){
+            CatalogItem gci = (CatalogItem)ret.getItem().get(i);
+            assertEquals(gci.getName(), cil[i].getName());
+            assertEquals(gci.getBrand(), cil[i].getBrand());
+            assertEquals(gci.getCategory(), cil[i].getCategory());
+            assertEquals(gci.getProductNumber(), cil[i].getProductNumber());
+            assertEquals(gci.getDescription(), cil[i].getDescription());
+            assertEquals(gci.getPrice(), cil[i].getPrice());
+        }
+        ]]>
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.echoCatalog">
+        <![CDATA[
+        CatalogType in = new CatalogType();
+        CatalogItem [] cil = {new CatalogItem(), new CatalogItem()};
+        cil[0].setName("JAXRPC SI 1.1.2");
+        cil[0].setBrand("Sun Microsystems, Inc.");
+        cil[0].setCategory("Web Services");
+        cil[0].setProductNumber(1234);
+        cil[0].setDescription("Coolest Webservice Product");
+        cil[0].setPrice(new java.math.BigDecimal("100"));
+        cil[1].setName("JAXRPC SI 2.0");
+        cil[1].setBrand("Sun Microsystems, Inc.");
+        cil[1].setCategory("Web Services");
+        cil[1].setProductNumber(5678);
+        cil[1].setDescription("Coolest Webservice Product");
+        cil[1].setPrice(new java.math.BigDecimal("200"));
+        in.getItem().add(cil[0]);
+        in.getItem().add(cil[1]);
+        CatalogType ret = retailerPort.echoCatalog(in);
+        for(int i = 0; i < ret.getItem().size(); i++){
+            CatalogItem gci = ret.getItem().get(i);
+            assertEquals(gci.getName(), cil[i].getName());
+            assertEquals(gci.getBrand(), cil[i].getBrand());
+            assertEquals(gci.getCategory(), cil[i].getCategory());
+            assertEquals(gci.getProductNumber(), cil[i].getProductNumber());
+            assertEquals(gci.getDescription(), cil[i].getDescription());
+            assertEquals(gci.getPrice(), cil[i].getPrice());
+        }
+        ]]>
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.testCatalog">
+        <description>
+            testCatalog() test.
+        </description>
+        <![CDATA[
+        CatalogType in = new CatalogType();
+        CatalogItem cil = new CatalogItem();
+        cil.setName("JAXWS RI 2.1.1");
+        cil.setBrand("java.net");
+        cil.setCategory("Web Services");
+        cil.setProductNumber(1234);
+        cil.setDescription("Coolest Webservice Product");
+        cil.setPrice(new java.math.BigDecimal("100"));
+
+        String expectedName = "java.net";
+
+        Holder name = new Holder();
+        name.value = "java";
+
+        int index = 1234;
+
+        CatalogType ret = retailerPort.testCatalog(name, index);
+        assertEquals(name.value, expectedName);
+
+        CatalogItem gci = ret.getItem().get(0);
+        assertEquals(gci.getName(), cil.getName());
+        assertEquals(gci.getBrand(), cil.getBrand());
+        assertEquals(gci.getCategory(), cil.getCategory());
+        assertEquals(gci.getProductNumber(), cil.getProductNumber());
+        assertEquals(gci.getDescription(), cil.getDescription());
+        assertEquals(gci.getPrice(), cil.getPrice());
+        ]]>
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.helloOneWay">
+        <description>
+            oneWay test.
+        </description>
+        retailerPort.helloOneWay("JAXWS RI 2.1.1");
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.holders">
+        <description>
+            Test for Holders.
+        </description>
+        <![CDATA[
+        String str = "1";
+        Holder inout = new Holder();
+        inout.value = 1;
+        double out = retailerPort.testHolders(str, inout);
+        assertEquals(inout.value, 2);
+        assertEquals(out, 1.0);
+        ]]>
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.holders.shortArrayTest">
+        <description>
+            Test for arrays.
+        </description>
+        ShortArrayType req = new ShortArrayType();
+        req.getShortArray().add((short)100);
+        req.getShortArray().add((short)200);
+        req.getShortArray().add((short)210);
+        ShortArrayResponseType resp = retailerPort.shortArrayTest(req);
+        assertEquals(resp.getShortArray().get(0), (short)100);
+        assertEquals(resp.getShortArray().get(1), (short)200);
+        assertEquals(resp.getShortArray().get(2), (short)210);
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.holders.parameterOrder">
+        <description>
+            Test for parameterOrder.
+        </description>
+        <![CDATA[
+        int bar = 1;
+        String foo = "Hello World!";
+        Holder foo1 = new Holder();
+        int resp = retailerPort.testParameterOrder(bar, foo, foo1);
+        assertTrue(bar == resp && foo.equals(foo1.value));
+        ]]>
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.holders.unboundParts">
+        <description>
+            Test for unbound parts.
+        </description>
+        <![CDATA[
+        String foo = "3";
+        String foo1 = "4";
+        Holder bar = new Holder();
+        Holder bar1 = new Holder();
+        int resp = retailerPort.testUnboundedParts(foo, foo1, bar, bar1);
+        assertEquals(((Integer)bar.value).intValue(), 3);
+        assertEquals(foo1, "4");
+        assertNull(bar1.value);
+        assertEquals(resp, 0);
+        ]]>
+    </client>
+
+    <client name="fromwsdl.wsdl_rpclit.holders.unboundParts1">
+        <description>
+            JAXWS spec General Consideration test for unbound parts with default values
+        </description>
+        <![CDATA[
+        String fn = "foo";
+        String ln = "bar";
+        String mn = "duke";
+        int age = 100;
+        Holder nameHolder = new Holder();
+        Holder addressHolder = new Holder();
+        Holder personalHolder = new Holder();
+        retailerPort.getGCBug(fn, ln, mn, age, nameHolder, personalHolder,addressHolder);
+        assertEquals(((NameType)nameHolder.value).getFn(),fn);
+        assertEquals(((NameType)nameHolder.value).getLn(), ln);
+        ]]>
+    </client>
+</descriptor>

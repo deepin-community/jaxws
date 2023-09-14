@@ -1,0 +1,55 @@
+Information about jaxws
+-----------------------
+
+This package was debianized using the mh_make command
+from the maven-debian-helper package.
+
+The build system uses Maven but prevents it from downloading
+anything from the Internet, making the build compliant with
+the Debian policy.
+
+
+Testing
+-------
+
+The JAX-WS Reference Implementation provides several examples
+that can be useful to check if the package is working properly.
+The procedure looks like this:
+
+ * Build the package and install libjaxws-java and jaxws
+
+ * Declare the JAXWS_HOME environment variable:
+
+     export JAXWS_HOME=/usr/share/jaxws/
+
+ * Go into the supplychain example directory (relatively to the
+   source package root):
+
+     cd jaxws-ri/samples/src/main/samples/supplychain
+
+ * Start the web server with:
+
+     ant server-j2se
+
+ * Open a new terminal and build the client:
+
+     ant client
+
+ * Run the client:
+
+     ant run
+
+ * Stop the server:
+
+     ant server-j2se-stop
+
+ * Repeat the procedure for these other examples:
+
+    jaxws-ri/samples/src/main/samples/fromjava
+    jaxws-ri/samples/src/main/samples/external-metadata-fromwsdl
+
+If an exception occurs at any moment then there is something wrong.
+The typical error is NoClassDefFoundError/ClassNotFoundException
+caused by an incomplete classpath, either for the jaxws-rt.jar file
+or one of its dependencies. Update the Class-Path attribute in the
+MANIFEST.MF file and try again.

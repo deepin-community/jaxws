@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project name="jaxws-tools-javadocs" default="build-javadocs" basedir=".">
+    <description>Builds javadocs for JAX-WS RI Tools Bundle.</description>
+    
+    <target name="build-javadocs" depends="attach"/>
+    
+    <target name="init">
+        <property name="api.dest.dir" value="${project.build.directory}/apidocs" />
+        <property name="javadoc.jar" value="${project.build.directory}/${project.artifactId}-${project.version}-javadoc.jar" />
+        <property name="links.dir" value="${javadoc.links.dir}" />
+        <property name="links.offline" value="${javadoc.links.offline}" />
+        <mkdir dir="${api.dest.dir}" />
+        <condition property="jdk9" value="false" else="true">
+            <or>
+                <equals arg1="${ant.java.version}" arg2="1.5"/>
+                <equals arg1="${ant.java.version}" arg2="1.6"/>
+                <equals arg1="${ant.java.version}" arg2="1.7"/>
+                <equals arg1="${ant.java.version}" arg2="1.8"/>
+            </or>
+        </condition>
+    </target>
+
+    <target name="javadoc-old" unless="${jdk9}" depends="init">
+        <javadoc packagenames=".,com.sun.xml.ws.*,com.sun.pept.*,javax.xml.ws.*,javax.xml.soap.*,javax.xml.bind.*,com.sun.tools.ws.*"
+                 sourcepath="${project.build.directory}/bundlesources"
+                 destdir="${api.dest.dir}"
+                 author="false"
+                 version="false"
+                 use="true"
+                 access="package"
+                 windowtitle="JAX-WS RI Tools Documentation"
+                 doctitle="JAX-WS RI"
+                 bottom="Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.">
+            <bootclasspath>
+                <pathelement path="${maven.dependency.javax.annotation.javax.annotation-api.jar.path}" />
+                <pathelement path="${maven.dependency.javax.jws.jsr181-api.jar.path}" />
+                <pathelement path="${maven.dependency.javax.xml.bind.jaxb-api.jar.path}" />
+                <pathelement path="${maven.dependency.javax.xml.soap.javax.xml.soap-api.jar.path}" />
+                <pathelement path="${maven.dependency.javax.xml.ws.jaxws-api.jar.path}" />
+                <pathelement path="${sun.boot.class.path}" />
+            </bootclasspath>
+            <classpath>
+                <path refid="maven.compile.classpath" />
+                <pathelement location="${ant.core.lib}" />
+            </classpath>
+            <link href="http://docs.oracle.com/javase/8/docs/api/" offline="${links.offline}" packagelistloc="${links.dir}/javase8/" />
+            <link href="https://javadoc.io/doc/javax.xml.bind/jaxb-api/${jaxb-api.version}/" offline="${links.offline}" packagelistloc="${links.dir}/jaxb-api/" />
+            <link href="https://javadoc.io/doc/javax.xml.ws/jaxws-api/${jaxws-api.version}/" offline="${links.offline}" packagelistloc="${links.dir}/jaxws-api/" />
+        </javadoc>
+    </target>
+
+    <target name="javadoc" if="${jdk9}" depends="init">
+        <javadoc packagenames=".,com.sun.xml.ws.*,com.sun.pept.*,javax.xml.ws.*,javax.xml.soap.*,javax.xml.bind.*,com.sun.tools.ws.*"
+                 sourcepath="${project.build.directory}/bundlesources"
+                 destdir="${api.dest.dir}"
+                 failonerror="true"
+                 author="false"
+                 version="false"
+                 use="true"
+                 access="package"
+                 windowtitle="JAX-WS RI Tools Documentation"
+                 doctitle="JAX-WS RI"
+                 bottom="Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.">
+            <classpath>
+                <path refid="maven.compile.classpath" />
+                <pathelement location="${ant.core.lib}" />
+            </classpath>
+            <arg line="--add-modules java.activation -Xdoclint:none"/>
+            <link href="http://docs.oracle.com/javase/8/docs/api/" offline="${links.offline}" packagelistloc="${links.dir}/javase8/" />
+            <link href="https://javadoc.io/doc/javax.xml.bind/jaxb-api/${jaxb-api.version}/" offline="${links.offline}" packagelistloc="${links.dir}/jaxb-api/" />
+            <link href="https://javadoc.io/doc/javax.xml.ws/jaxws-api/${jaxws-api.version}/" offline="${links.offline}" packagelistloc="${links.dir}/jaxws-api/" />
+        </javadoc>
+    </target>
+
+    <target name="jar" depends="javadoc-old,javadoc">
+        <jar jarfile="${javadoc.jar}">
+            <fileset dir="${api.dest.dir}" />
+        </jar>
+    </target>
+
+    <target name="attach" depends="jar">
+        <attachartifact file="${javadoc.jar}" classifier="javadoc" type="jar" />
+    </target>
+</project>

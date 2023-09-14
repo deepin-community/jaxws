@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<definitions name="newWSDL" targetNamespace="http://j2ee.netbeans.org/wsdl/newWSDL"
+    xmlns:tns="http://j2ee.netbeans.org/wsdl/newWSDL"
+    xmlns:ns1="urn:WS/types"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns="http://xml.netbeans.org/schema/newXMLSchema" xmlns:plink="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+
+  <!-- Type definitions -->
+  <types>
+    <xsd:schema targetNamespace="http://j2ee.netbeans.org/wsdl/newWSDL">
+    <!-- TODO: type XML schema elements and types here, e.g.: -->
+      <!--
+      <xsd:element name="id" type="xsd:string"/>
+      <xsd:element name="item" type="ns1:ItemType"/>
+      <xsd:complexType name="ItemType">
+        <xsd:sequence>
+          <xsd:element ref="ns1:id"/>
+          <xsd:element name="productName" type="xsd:string"/>
+          <xsd:element name="price" type="xsd:double"/>
+          <xsd:element name="quantity" type="xsd:integer"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="error" type="xsd:string"/>
+      -->
+      <xsd:import schemaLocation="newXmlSchema.xsd" namespace="http://xml.netbeans.org/schema/newXMLSchema"/>
+    </xsd:schema>
+  </types>
+
+  <!-- Message definitions -->
+  <!-- TODO: write one or more messages here, e.g.: -->
+  <!--
+  <message name ="newWSDLRequest">
+    <part name="id" element="ns1:id"/>
+  </message>
+
+  <message name ="newWSDLResponse">
+    <part name="item" element="ns1:item"/>
+  </message>
+
+  <message name ="newWSDLError">
+    <part name="error" element="ns1:error"/>
+  </message>
+  -->
+
+  <!-- Port type definitions -->
+  <!-- TODO: write one or more port types here (usually just one), e.g.: -->
+  <!--
+  <portType name="newWSDLPortType">
+    <operation name="newWSDLOperation">
+      <input message="tns:newWSDLRequest"/>
+      <output message="tns:newWSDLResponse"/>
+      <fault message="tns:newWSDLError" name="error"/>
+    </operation>
+  </portType>
+  -->
+
+  <!-- Binding definitions -->
+  <!-- TODO: write one or more bindings here (usually just one), e.g.: -->
+  <!--
+  <binding name="newWSDLBinding" type="tns:newWSDLPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="newWSDLOperation">
+      <soap:operation soapAction="REPLACE_WITH_ACTION_URL"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="error">
+        <soap:fault name="error" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  -->
+
+  <!-- Service and Port (network address) definitions -->
+  <!-- TODO: write one or more service elements here (usually just one), e.g.: -->
+  <!--
+  <service name="newWSDLService">
+    <port name="newWSDLPort" binding="tns:newWSDLBinding">
+      <soap:address location="REPLACE_WITH_ACTUAL_WEB_SERVICE_URL"/>
+    </port>
+  </service>
+  -->
+    <message name="message1">
+        <part name="part1" element="ns:newElement"/>
+    </message>
+    <message name="message2">
+        <part name="part1" element="ns:newElement"/>
+    </message>
+    <message name="message3">
+        <part name="part1" element="ns:newElement"/>
+    </message>
+    <message name="message4">
+        <part name="part1" element="ns:newElement"/>
+    </message>
+    <portType name="portType1">
+        <operation name="operation1">
+            <input name="input1" message="tns:message1"/>
+            <output name="output1" message="tns:message2"/>
+        </operation>
+        <operation name="operation2">
+            <input name="input2" message="tns:message3"/>
+            <output name="output2" message="tns:message4"/>
+        </operation>
+    </portType>
+    <binding name="binding1" type="tns:portType1">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+        <operation name="operation1">
+            <soap:operation/>
+            <input name="input1">
+                <soap:body/>
+           </input>
+           <output name="output1">
+               <soap:body/>
+           </output>
+        </operation>
+        <operation name="operation2">
+            <soap:operation/>
+            <input name="input2">
+                <soap:body/>
+            </input>
+            <output name="output2">
+               <soap:body/>
+           </output>
+        </operation>
+    </binding>
+    <service name="service1">
+        <port name="port1" binding="tns:binding1">
+            <soap:address location="http://localhost:12010/sample"/>
+        </port>
+    </service>
+    <plink:partnerLinkType name="partnerlinktype1">
+        <plink:role name="partnerlinktyperole1" portType="tns:portType1"/>
+    </plink:partnerLinkType>
+</definitions>

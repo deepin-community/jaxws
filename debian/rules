@@ -1,4 +1,21 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
+	dh $@ --buildsystem=maven
+
+override_dh_auto_build:
+	dh_auto_build -- -f jaxws-ri/pom.xml install -DskipTests
+	dh_auto_build -- -f jaxws-ri/pom.xml package -DskipTests -Pjaxws-tools
+
+override_dh_auto_test:
+	dh_auto_test -- -f jaxws-ri/pom.xml test
+
+override_dh_auto_install:
+	dh_auto_install -- -f jaxws-ri/pom.xml -Pjaxws-tools
+
+override_dh_install:
+	dh_install
+	chmod +x debian/jaxws/usr/share/jaxws/bin/*.sh
+
+override_dh_auto_clean:
+	dh_auto_clean -- -f jaxws-ri/pom.xml
