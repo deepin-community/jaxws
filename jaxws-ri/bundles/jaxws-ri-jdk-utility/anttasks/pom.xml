@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 2013-2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.sun.xml.ws</groupId>
+        <artifactId>bundles</artifactId>
+        <version>2.3.0.2</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>jaxws-ri-jdk-anttasks</artifactId>
+    <version>2.3.0.2</version>
+
+    <packaging>jar</packaging>
+    <name>JAX-WS RI - JDK Utility jars - Ant tasks</name>
+    <description>Repackaged JAXWS ant tasks for JDK testing</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri-jdk</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sun.xml.ws</groupId>
+                    <artifactId>jaxws-rt</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.xml.ws</groupId>
+                    <artifactId>jaxws-tools</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <netbeans.hint.jdkPlatform>JDK_9</netbeans.hint.jdkPlatform>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <!--unpack sources subset neccessary for ant-tasks jar-->
+                    <execution>
+                        <id>unpack-sources</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>jaxws-rt</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>sources</classifier>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>jaxws-tools</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>sources</classifier>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.sun.xml.bind</groupId>
+                                    <artifactId>jaxb-xjc</artifactId>
+                                    <version>${jaxb.version}</version>
+                                    <classifier>sources</classifier>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.sun.xml.bind</groupId>
+                                    <artifactId>jaxb-jxc</artifactId>
+                                    <version>${jaxb.version}</version>
+                                    <classifier>sources</classifier>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>target/unpacked-sources</outputDirectory>
+                            <includes>
+                                **/com/sun/**/*Task.java,
+                                **/com/sun/tools/ws/ant/*,
+                                **/com/sun/tools/xjc/Messages.java,
+                                **/com/sun/tools/xjc/SecureLoader.java,
+                                **/com/sun/tools/xjc/ClassLoaderBuilder.java,
+                                **/com/sun/tools/xjc/XJCFacade.java,
+                                **/com/sun/tools/xjc/XJCBase.java,
+                                **/com/sun/tools/jxc/SchemaGenBase.java,
+                                **/com/sun/tools/jxc/SchemaGeneratorFacade.java,
+                                **/com/sun/tools/jxc/SecureLoader.java,
+                                **/com/sun/istack/tools/*.java
+                            </includes>
+                        </configuration>
+                    </execution>
+
+                    <!--download jaxws-ri-jdk*.jar to redefine classes in older jdk for final compilation-->
+                    <execution>
+                        <id>copy-dependencies-for-endorsed-preparation</id>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--repackaging sources to internal packages-->
+            <plugin>
+                <groupId>com.sun.wts.tools.ant</groupId>
+                <artifactId>package-rename-task</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <id>repackage-to-internal</id>
+                        <goals>
+                            <goal>rename</goal>
+                        </goals>
+                        <configuration>
+                            <srcDir>${project.basedir}/target/unpacked-sources</srcDir>
+                            <rootDir>${project.basedir}/target/generated-sources/</rootDir>
+                            <excludes>
+                                com.sun.istack.tools.ProtectedTask,
+                                com.sun.tools.ws.ant,
+                                com.sun.tools.xjc.XJCTask,
+                                com.sun.tools.xjc.XJC2Task,
+                                com.sun.tools.xjc.XJCBase,
+                                com.sun.tools.xjc.Messages,
+                                com.sun.tools.xjc.XJCFacade,
+                                com.sun.tools.xjc.XJCFacade,
+                                com.sun.tools.xjc.ClassLoaderBuilder,
+                                com.sun.tools.xjc.SecureLoader,
+                                com.sun.tools.jxc.SecureLoader,
+                                com.sun.tools.jxc.AptBasedTask,
+                                com.sun.tools.jxc.SchemaGenTask,
+                                com.sun.tools.jxc.SchemaGenBase,
+                                com.sun.tools.jxc.SchemaGeneratorFacade</excludes>
+                            <patterns>
+                                <com.sun.istack>com.sun.istack.internal</com.sun.istack>
+                                <com.sun.codemodel>com.sun.codemodel.internal</com.sun.codemodel>
+                                <com.sun.xml.bind>com.sun.xml.internal.bind</com.sun.xml.bind>
+                                <com.sun.xsom>com.sun.xsom.internal</com.sun.xsom>
+                                <com.sun.txw2>com.sun.xsom.internal</com.sun.txw2>
+                                <org.jvnet.fastinfoset>com.sun.xml.internal.org.jvnet.fastinfoset</org.jvnet.fastinfoset>
+                                <org.jvnet.staxex>com.sun.xml.internal.org.jvnet.staxex</org.jvnet.staxex>
+                                <com.sun.tools.ws>com.sun.tools.internal.ws</com.sun.tools.ws>
+                                <org.glassfish.external>com.sun.org.glassfish.external</org.glassfish.external>
+                                <org.glassfish.gmbal>com.sun.org.glassfish.gmbal</org.glassfish.gmbal>
+                                <com.sun.tools.xjc>com.sun.tools.internal.xjc</com.sun.tools.xjc>
+                                <com.sun.tools.jxc>com.sun.tools.internal.jxc</com.sun.tools.jxc>
+                            </patterns>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>duplicate-secure-loader-class</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="Duplicating package private class SecureLoader" />
+                                <copy file="${basedir}/target/generated-sources/com/sun/istack/internal/tools/SecureLoader.java"
+                                      todir="${basedir}/target/generated-sources/com/sun/istack/tools/" />
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-jdk9-classes</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <move todir="${project.build.directory}/generated-sources" overwrite="true" failonerror="false">
+                                    <fileset dir="${project.build.directory}/generated-sources/META-INF/versions/9">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </move>
+                                <delete dir="${project.build.directory}/generated-sources/META-INF/versions" verbose="true" failonerror="false"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>prepare-endorsed-for-final-compilation</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="Preparing endorsed for final compilation of *internal* classes using jdk&lt;jdk9 ..." />
+                                <copy todir="${basedir}/target/endorsed/">
+                                    <fileset dir="${basedir}/target/dependency/">
+                                        <include name="jaxws-ri-jdk**.jar" />
+                                    </fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--necessary since the package-rename task doesn't work properly - fixing it's errors-->
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>${project.basedir}/target/generated-sources/</basedir>
+                    <filesToInclude>com/sun/istack/tools/ProtectedTask.java,
+                        com/sun/istack/tools/SecureLoader.java,
+                        com/sun/tools/jxc/**.java,
+                        com/sun/tools/xjc/**.java,
+                        com/sun/tools/ws/ant/**.java
+                    </filesToInclude>
+                    <replacements>
+                        <replacement>
+                            <token><![CDATA[package com.sun.istack.internal.tools;]]></token>
+                            <value><![CDATA[package com.sun.istack.tools;]]></value>
+                        </replacement>
+                        <replacement>
+                            <token><![CDATA[package com.sun.tools.internal.xjc;]]></token>
+                            <value><![CDATA[package com.sun.tools.xjc; import com.sun.tools.internal.xjc.*;]]></value>
+                        </replacement>
+                        <replacement>
+                            <token><![CDATA[package com.sun.tools.internal.jxc;]]></token>
+                            <value><![CDATA[package com.sun.tools.jxc; import com.sun.tools.internal.jxc.*;]]></value>
+                        </replacement>
+                        <replacement>
+                            <token><![CDATA[package com.sun.tools.internal]]></token>
+                            <value><![CDATA[package com.sun.tools]]></value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+
+            <!--compilation to verify the sources are complete-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <fork>true</fork>
+                            <!--redirecting to different place not to be contained in the result bundle-->
+                            <generatedSourcesDirectory>${project.build.directory}/annotations</generatedSourcesDirectory>
+                            <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                            <compilerArgs combine.self="override">
+                                <arg>--add-modules</arg>
+                                <arg>java.compiler</arg>
+                                <!--<arg>-Xmodule:java.xml.ws</arg>-->
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>base-compile</id>
+                        <configuration>
+                            <skipMain>true</skipMain>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

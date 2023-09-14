@@ -1,0 +1,30 @@
+Description: Disables the high availability support due to missing libraries
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: not-needed
+--- a/jaxws-ri/servlet/src/main/java/com/sun/xml/ws/transport/http/servlet/ServletAdapter.java
++++ b/jaxws-ri/servlet/src/main/java/com/sun/xml/ws/transport/http/servlet/ServletAdapter.java
+@@ -41,7 +41,6 @@
+ package com.sun.xml.ws.transport.http.servlet;
+ 
+ import com.sun.istack.NotNull;
+-import com.sun.xml.ws.api.ha.HighAvailabilityProvider;
+ import com.sun.xml.ws.api.ha.StickyFeature;
+ import com.sun.xml.ws.api.model.wsdl.WSDLPort;
+ import com.sun.xml.ws.api.server.BoundEndpoint;
+@@ -92,16 +91,6 @@
+         }
+ 
+         boolean sticky = false;
+-        if (HighAvailabilityProvider.INSTANCE.isHaEnvironmentConfigured()) {
+-            WebServiceFeature[] features = endpoint.getBinding().getFeatures().toArray();
+-            for(WebServiceFeature f : features) {
+-                if (f instanceof StickyFeature) {
+-                    sticky = true;
+-                    break;
+-                }
+-            }
+-            disableJreplicaCookie = HighAvailabilityProvider.INSTANCE.isDisabledJreplica();
+-        }
+         stickyCookie = sticky;
+     }
+ 

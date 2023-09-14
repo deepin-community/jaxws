@@ -1,0 +1,11 @@
+01-asm-embedding.patch
+02-apache-xml-resolver.patch
+03-gmbal-compatibility.patch
+04-ignore-modules.patch
+05-disable-ha-support.patch
+06-disable-javadoc.patch
+07-conditional-tools.patch
+08-dependencies-versions.patch
+09-dependency-plugin.patch
+10-adjust-classpath.patch
+11-enable-java9-modules.patch

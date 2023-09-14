@@ -1,0 +1,55 @@
+# List of POM files for the package
+# Format of this file is:
+# <path to pom file> [option]*
+# where option can be:
+#   --ignore: ignore this POM and its artifact if any
+#   --ignore-pom: don't install the POM. To use on POM files that are created
+#     temporarily for certain artifacts such as Javadoc jars. [mh_install, mh_installpoms]
+#   --no-parent: remove the <parent> tag from the POM
+#   --package=<package>: an alternative package to use when installing this POM
+#      and its artifact
+#   --has-package-version: to indicate that the original version of the POM is the same as the upstream part
+#      of the version for the package.
+#   --keep-elements=<elem1,elem2>: a list of XML elements to keep in the POM
+#      during a clean operation with mh_cleanpom or mh_installpom
+#   --artifact=<path>: path to the build artifact associated with this POM,
+#      it will be installed when using the command mh_install. [mh_install]
+#   --java-lib: install the jar into /usr/share/java to comply with Debian
+#      packaging guidelines
+#   --usj-name=<name>: name to use when installing the library in /usr/share/java
+#   --usj-version=<version>: version to use when installing the library in /usr/share/java
+#   --no-usj-versionless: don't install the versionless link in /usr/share/java
+#   --dest-jar=<path>: the destination for the real jar.
+#     It will be installed with mh_install. [mh_install]
+#   --classifier=<classifier>: Optional, the classifier for the jar. Empty by default.
+#   --site-xml=<location>: Optional, the location for site.xml if it needs to be installed.
+#     Empty by default. [mh_install]
+#
+jaxws-ri/pom.xml                                       --has-package-version
+jaxws-ri/boms/bom/pom.xml                  --no-parent --has-package-version
+jaxws-ri/boms/bom-ext/pom.xml                          --has-package-version
+jaxws-ri/bundles/pom.xml                               --has-package-version
+jaxws-ri/bundles/jaxws-rt/pom.xml                      --has-package-version
+jaxws-ri/bundles/jaxws-tools/pom.xml                   --has-package-version
+jaxws-ri/httpspi-servlet/pom.xml                       --has-package-version --usj-name=jaxws-ri-httpspi-servlet
+jaxws-ri/rt/pom.xml                                    --has-package-version --usj-name=jaxws-ri-runtime
+jaxws-ri/rt-fi/pom.xml                                 --has-package-version --usj-name=jaxws-ri-rt-fastinfoset
+jaxws-ri/rt-jdk9/pom.xml                               --has-package-version --usj-name=jaxws-ri-rt-jdk9
+jaxws-ri/servlet/pom.xml                               --has-package-version --usj-name=jaxws-ri-servlet
+jaxws-ri/tools/wscompile/pom.xml                       --has-package-version
+jaxws-ri/tools/wscompile-jdk9/pom.xml                  --has-package-version
+
+jaxws-ri/bundles/jaxws-ri/pom.xml                      --ignore
+jaxws-ri/bundles/jaxws-ri-jdk/pom.xml                  --ignore
+jaxws-ri/bundles/jaxws-ri-jdk-utility/anttasks/pom.xml --ignore
+jaxws-ri/bundles/jaxws-ri-jdk-utility/servlet/pom.xml  --ignore
+jaxws-ri/bundles/jaxws-ri-src/pom.xml                  --ignore
+jaxws-ri/docs/pom.xml                                  --ignore
+jaxws-ri/extras/pom.xml                                --ignore
+jaxws-ri/eclipselink_jaxb/pom.xml                      --ignore
+jaxws-ri/eclipselink_sdo/pom.xml                       --ignore
+jaxws-ri/rt-ha/pom.xml                                 --ignore
+jaxws-ri/samples/pom.xml                               --ignore
+jaxws-ri/tests/pom.xml                                 --ignore
+jaxws-ri/transports/local/pom.xml                      --ignore
+jaxws-ri/transports/async-client-transport/pom.xml     --ignore

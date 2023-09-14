@@ -1,0 +1,4 @@
+debian/wsgen.1                                                 /usr/share/jaxws/man/
+debian/wsimport.1                                              /usr/share/jaxws/man/
+jaxws-ri/bundles/jaxws-ri/src/main/resources/bin/wsgen.sh      /usr/share/jaxws/bin/
+jaxws-ri/bundles/jaxws-ri/src/main/resources/bin/wsimport.sh   /usr/share/jaxws/bin/

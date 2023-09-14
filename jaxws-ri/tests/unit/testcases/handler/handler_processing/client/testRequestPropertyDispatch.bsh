@@ -1,0 +1,102 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://oss.oracle.com/licenses/CDDL+GPL-1.1
+ * or LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
+
+    import fromwsdl.handler.common.BaseSOAPHandler;
+    import fromwsdl.handler.common.HandlerTracker;
+    import junit.framework.Test;
+    import junit.framework.TestSuite;
+
+    import javax.xml.ws.*;
+    import javax.xml.ws.handler.Handler;
+    import javax.xml.ws.soap.SOAPBinding;
+    import java.util.ArrayList;
+    import java.util.HashSet;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.concurrent.Future;
+    
+    /*
+     * Sets a property on the request context with dispatch
+     * and verifies that the property exists in the handler.
+     * Also adds a handler to add 1 to the messages just to
+     * make sure handlers are being invoked.
+     */
+
+        HandlerTracker tracker = HandlerTracker.getClientInstance();
+        Dispatch dispatch = getDispatchJAXB(testPortQName);
+
+        // tell the server handlers not to do anything
+        ReportService reportStub = getReportStub(getService());
+        reportStub.clearHandlerTracker();
+
+        // add handlers
+        String myHandlerName = "MyDispatchHandler";
+        BaseSOAPHandler propCheckingHandler = new BaseSOAPHandler();
+        propCheckingHandler.setName(CLIENT_PREFIX + myHandlerName);
+        propCheckingHandler.initTheHandler();
+        String otherHandlerName = "MyOtherHandler";
+        BaseSOAPHandler numberAddingHandler = new BaseSOAPHandler();
+        numberAddingHandler.setName(CLIENT_PREFIX + otherHandlerName);
+        numberAddingHandler.initTheHandler();
+        List newHandlers = new ArrayList();
+        newHandlers.add(propCheckingHandler);
+        newHandlers.add(numberAddingHandler);
+        dispatch.getBinding().setHandlerChain(newHandlers);
+
+        // add the property
+        dispatch.getRequestContext().put(USER_CLIENT_PROPERTY_NAME,
+            USER_PROPERTY_CLIENT_SET);
+
+        // tell the client handlers what to do
+        tracker.clearAll();
+        tracker.setHandlerAction(CLIENT_PREFIX + myHandlerName,
+            HA_CHECK_FOR_USER_PROPERTY_OUTBOUND);
+        tracker.setHandlerAction(CLIENT_PREFIX + otherHandlerName,
+            HA_ADD_ONE);
+
+        // make the call (will get exception if handler doesn't see property)
+        int x = 1;
+        int diff = 2; // for the number adding handler
+        TestInt request = new TestInt();
+        request.setIntin(x);
+        TestIntResponse response = (TestIntResponse) dispatch.invoke(request);
+        assertEquals("did not get proper response",
+            x+diff, response.getIntout());
+

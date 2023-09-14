@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+
+    Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
+
+    The contents of this file are subject to the terms of either the GNU
+    General Public License Version 2 only ("GPL") or the Common Development
+    and Distribution License("CDDL") (collectively, the "License").  You
+    may not use this file except in compliance with the License.  You can
+    obtain a copy of the License at
+    https://oss.oracle.com/licenses/CDDL+GPL-1.1
+    or LICENSE.txt.  See the License for the specific
+    language governing permissions and limitations under the License.
+
+    When distributing the software, include this License Header Notice in each
+    file and include the License file at LICENSE.txt.
+
+    GPL Classpath Exception:
+    Oracle designates this particular file as subject to the "Classpath"
+    exception as provided by Oracle in the GPL Version 2 section of the License
+    file that accompanied this code.
+
+    Modifications:
+    If applicable, add the following below the License Header, with the fields
+    enclosed by brackets [] replaced by your own identifying information:
+    "Portions Copyright [year] [name of copyright owner]"
+
+    Contributor(s):
+    If you wish your version of this file to be governed by only the CDDL or
+    only the GPL Version 2, indicate your decision by adding "[Contributor]
+    elects to include this software in this distribution under the [CDDL or GPL
+    Version 2] license."  If you don't indicate a single choice of license, a
+    recipient has the option to distribute your version of this file under
+    either the CDDL, the GPL Version 2 or to extend the choice of license to
+    its licensees as provided above.  However, if you add GPL Version 2 code
+    and therefore, elected the GPL Version 2 license, then the option applies
+    only if the new code is made subject to such option by the copyright
+    holder.
+
+-->
+
+<descriptor since="2.2" uses="ri">
+  <description>Schema Validaiton fromwsdl tests</description>
+  <service basedir="./server">
+    <wsdl href="AddNumbers.wsdl"/>
+  </service>
+
+  <client name="fromwsdl.schema_validation.fault_code_552.doclit1">
+    <description>Server should return correct faultCode </description>
+    <![CDATA[
+      import java.lang.reflect.Proxy;
+      import java.io.*;
+      import testutil.ClientServerTestUtil;
+      import testutil.HTTPResponseInfo;
+      import javax.xml.soap.*;
+      import javax.xml.namespace.QName;
+      import javax.xml.ws.soap.*;
+
+      message = "<S:Envelope xmlns:S='http://schemas.xmlsoap.org/soap/envelope/'><S:Body><addNumbers xmlns='http://duke.example.org'><arg0>12345</arg0><arg1>0</arg1></addNumbers></S:Body></S:Envelope>";
+
+      portName = new QName("http://duke.example.org", "AddNumbersPort");
+      dispatch = addNumbersService.createDispatch(portName,
+        SOAPMessage.class, Service.Mode.MESSAGE);
+      messageFactory = MessageFactory.newInstance();
+      headers = new MimeHeaders();
+      headers.addHeader("Content-Type", "text/xml");
+      soapMsg = messageFactory.createMessage(headers, new ByteArrayInputStream(message.getBytes()));
+      try {
+        soapMsg = dispatch.invoke(soapMsg);
+        fail("Should have generated schema validation fault");
+      } catch(Exception e) {
+        assertTrue(e instanceof SOAPFaultException);
+        got = e.getFault().getFaultCodeAsQName();
+        exp = new QName("http://schemas.xmlsoap.org/soap/envelope/", "Client");
+        assertEquals(exp, got);
+
+        boolean captureStackTrace;
+        try {
+            captureStackTrace = Boolean.getBoolean("com.sun.xml.ws.fault.SOAPFaultBuilder.captureStackTrace");
+        } catch (SecurityException e) {
+            // ignore
+        }
+        if (captureStackTrace) {
+          // want to make sure that correct stack trace is sent
+          // cvc-totalDigits-valid: Value '12345' has 5 total digits, but the number of total digits has been limited to 4.
+          sax = false;
+          while(e != null) {
+            if (e.getMessage() != null && e.getMessage().startsWith("cvc-totalDigits-valid")) {
+               sax = true;
+               break;
+            }
+            e = e.getCause();
+          }
+          assertEquals(true, sax);
+        }
+      }
+    ]]>
+  </client>
+
+</descriptor>

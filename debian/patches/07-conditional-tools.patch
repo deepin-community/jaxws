@@ -1,0 +1,25 @@
+Description: Move the jaxws-tools module to its own Maven profile to build it separately
+Author: Emmanuel Bourg <ebourg@apache.org>
+Forwarded: not-needed
+--- a/jaxws-ri/pom.xml
++++ b/jaxws-ri/pom.xml
+@@ -630,13 +630,18 @@
+         <module>boms/bom</module>
+         <module>boms/bom-ext</module>
+         <module>bundles/jaxws-rt</module>
+-        <module>bundles/jaxws-tools</module>
+         <module>extras</module>
+         <module>tests</module>
+     </modules>
+ 
+     <profiles>
+         <profile>
++            <id>jaxws-tools</id>
++            <modules>
++                <module>bundles/jaxws-tools</module>
++            </modules>
++        </profile>
++        <profile>
+             <id>endorsed-dirs</id>
+             <activation>
+                 <jdk>[1.6,9)</jdk>

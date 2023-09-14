@@ -1,0 +1,14 @@
+
+s/javax.annotation/org.apache.geronimo.specs/ s/javax.annotation-api/geronimo-annotation_1.3_spec/ * s/.*/debian/ * *
+s/asm/org.ow2.asm/ s/asm/asm-all/ * s/.*/debian/ * *
+junit junit * s/.*/3.x/ * *
+s/com.sun.xml.bind/org.glassfish.jaxb/ jaxb-core * s/.*/debian/ * *
+s/com.sun.xml.bind/org.glassfish.jaxb/ s/jaxb-impl/jaxb-runtime/ * s/.*/debian/ * *
+s/com.sun.xml.bind/org.glassfish.jaxb/ jaxb-jxc * s/.*/debian/ * *
+s/com.sun.xml.bind/org.glassfish.jaxb/ jaxb-xjc * s/.*/debian/ * *
+s/javax.mail/com.sun.mail/ s/mail/javax.mail/ * s/.*/debian/ * *
+s/com.sun.org.apache.xml.internal/xml-resolver/ s/resolver/xml-resolver/ * s/.*/debian/ * *
+org.glassfish.gmbal s/gmbal-api-only/gmbal/ * s/.*/debian/ * *
+com.sun.xml.ws httpspi-servlet * * * *
+com.sun.xml.ws jaxws-rt * * * *
+s/org.codehaus.woodstox/com.fasterxml.woodstox/ s/woodstox-core-asl/woodstox-core
